@@ -14,7 +14,9 @@ In your form, replace
 
 with
 
-    f.multi_text_field :phone_number, fields: { :first, :second, :third }
+    f.multi_text_field :phone_number, fields: { first: 3, second: 2, third: 4 }
+
+The value of each item in the fields hash specifies the max character length allowed for that field.
 
 ## Installation
 

@@ -17,7 +17,7 @@ module AttrSplitter
         width = "width: " + ((length.to_f/2) + (length.to_f/8)).to_s + "em; margin-right: 5px;"
         name = "#{@object_name}[#{name}_#{record_name}]"
         id = "#{@object_name}_#{name}_#{record_name}"
-        field_parts += @template.content_tag(:input, value_part, name: name, id: id, type: "text", maxlength: length, style: width)
+        field_parts += @template.text_field_tag(name, value_part, id: id, type: "text", maxlength: length, style: width)
       end
 
       content = @template.content_tag(:div, class: "control-group") do

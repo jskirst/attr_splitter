@@ -8,15 +8,15 @@ module AttrSplitter
       field_parts = "".html_safe
       value = @object.send(record_name)
       index = 0
-      fields.each do |name, length|
+      fields.each do |prefix, length|
         if value
           value_part = value.slice(index, length)
           index += length
         end
 
         width = "width: " + ((length.to_f/2) + (length.to_f/8)).to_s + "em; margin-right: 5px;"
-        name = "#{@object_name}[#{name}_#{record_name}]"
-        id = "#{@object_name}_#{name}_#{record_name}"
+        name = "#{@object_name}[#{prefix}_#{record_name}]"
+        id = "#{@object_name}_#{prefix}_#{record_name}"
         field_parts += @template.text_field_tag(name, value_part, id: id, type: "text", maxlength: length, style: width)
       end
 

@@ -15,6 +15,7 @@ module AttrSplitter
       fields = Hash[*fields]
       raise "AttrSplitter: No fields present" if fields.empty?
       fields.each_with_index do |(name, length), i|
+        options = {}
         field_name = [name, record_name] if placement == :prefixes
         field_name = [record_name, name] if placement == :suffixes
         field_name = field_name.map{|a| a.to_s}.join("_")
@@ -35,23 +36,24 @@ module AttrSplitter
           end
         end
 
-        maxlength = length
-        name = "#{@object_name}[#{field_name}]"
-        id = "#{@object_name}_#{field_name}"
-        style = "width: " + ((length.to_f/2) + (length.to_f/8)).to_s + "em; margin-right: 5px;"
+        options[:maxlength] = length
+        options[:name] = "#{@object_name}[#{field_name}]"
+        options[:id] = "#{@object_name}_#{field_name}"
+        options[:style] = "width: " + ((length.to_f/2) + (length.to_f/8)).to_s + "em; margin-right: 5px;"
 
         if include_jump and next_input
-          onkeyup = "if(this.value.length == this.maxLength){ document.getElementById('#{next_input}').focus();}"
+          options[:onkeyup] = "if(this.value.length == this.maxLength){ document.getElementById('#{next_input}').focus();}"
         end
+        next_input = options[:id]
 
         if obscure_text
-          onblur = "if(this.value.length == this.maxLength){ this.type = 'password'; }"
-          onfocus = "this.type = 'text';"
+          options[:onblur] = "if(this.value.length == this.maxLength){ this.type = 'password'; }"
+          options[:onfocus] = "this.type = 'text';"
+          new_part = @template.password_field_tag(name, value_part, options)
+        else
+          new_part = @template.text_field_tag(name, value_part, options)
         end
-
-        next_input = id
-
-        new_part = @template.text_field_tag(name, value_part, id: id, style: style, maxlength: maxlength, onkeyup: onkeyup.to_s, onblur: onblur.to_s, onfocus: onfocus.to_s)
+        
         field_parts = new_part + field_parts
       end
       content = @template.content_tag(:div, class: "control-group") do

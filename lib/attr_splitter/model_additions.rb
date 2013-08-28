@@ -15,8 +15,7 @@ module AttrSplitter
         end
       end
 
-      split_attrs.each do |sa| 
-        attr_accessible(sa.to_sym)
+      split_attrs.each do |sa|
         define_method(sa) do
           instance_variable_get("@#{sa.to_s}")
         end

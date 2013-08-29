@@ -1,7 +1,6 @@
 module AttrSplitter
   module ModelAdditions
     def attr_splitter(attribute, args)
-      attr_accessible(attribute)
       placement = args.include?(:prefixes) ? :prefixes : :suffixes
       fields = args[placement]
       unless fields

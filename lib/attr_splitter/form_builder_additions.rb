@@ -31,9 +31,6 @@ module AttrSplitter
           start = value.length - length
           value_part = value.slice(start, value.length)
           value = value.slice(0, start)
-          unless value_part.blank? or value_part.length == length
-            raise "AttrSplitter: Bad value split for #{record_name}/#{i} - #{value_part}" 
-          end
         end
 
         options[:maxlength] = length

@@ -10,16 +10,38 @@ class User < SuperModel::Base
   attr_accessor :phone_number, :home_phone
 end
 
-describe AttrSplitter::ModelAdditions do
-  it "combines prefixed attributes on save" do
+describe AttrSplitter::ModelAdditions do  
+  it "combines prefixed attributes on create" do
     u = User.create!(first_phone_number: "415", second_phone_number: "555", third_phone_number: "9999")
     u.phone_number.should eq("4155559999")
   end
   
-  it "combines suffixed attributes on save" do
+  it "combines suffixed attributes on create" do
     u = User.new
     u = User.create!(home_phone_area_code: "415", home_phone_first_three: "555", home_phone_last_four: "9999")
     u.home_phone.should eq("4155559999")
+  end
+  
+  
+  it "combines suffixed attributes on update" do
+    u = User.create!
+    u.home_phone_area_code = "415"
+    u.home_phone_first_three = "555"
+    u.home_phone_last_four = "9999"
+    u.home_phone_dirty.should be_true
+    u.save!
+    u.home_phone.should eq("4155559999")
+  end
+  
+  it "does not combine prefixed attributes if they are unchanged" do
+    u = User.create!(first_phone_number: "415", second_phone_number: "555", third_phone_number: "9999")
+    u.phone_number.should eq("4155559999")
+    u.home_phone_area_code = "222"
+    u.home_phone_first_three = "222"
+    u.home_phone_last_four = "8888"
+    u.home_phone_dirty.should be_true
+    u.save!
+    u.phone_number.should eq("4155559999")
   end
 end
 

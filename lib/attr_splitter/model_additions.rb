@@ -27,9 +27,6 @@ module AttrSplitter
           instance_variable_get("@#{sa.to_s}")
         end
         define_method("#{sa.to_s}=") do |val|
-          if(val.blank?)
-            raise "SETTING BLANK VALUE"
-          end
           instance_variable_set("@#{sa.to_s}", val)
           send("#{dirty_attribute}=", true)
         end

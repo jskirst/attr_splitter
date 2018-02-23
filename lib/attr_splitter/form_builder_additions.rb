@@ -15,7 +15,7 @@ module AttrSplitter
       fields = Hash[*fields]
       raise "AttrSplitter: No fields present" if fields.empty?
       fields.each_with_index do |(name, length), i|
-        options = {}
+        options = fields_options
         field_name = [name, record_name] if placement == :prefixes
         field_name = [record_name, name] if placement == :suffixes
         field_name = field_name.map{|a| a.to_s}.join("_")
